@@ -32,10 +32,10 @@ def get_weather(city_name):
         return None
 
 
-def display_weather(weather_data):
+def display_weather(weather_data, city_name):
     
     if weather_data is None:
-        print("Could not get weather data")
+        print(f"Sorry, could not get weather data for '{city_name}'.")
         return None
     
     
