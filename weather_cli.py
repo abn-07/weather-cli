@@ -46,9 +46,27 @@ def display_weather(weather_data, city_name):
             feels_like = weather_data['main']['feels_like']
             humidity = weather_data['main']['humidity']
 
+            # Dictionary to map weather descriptions to emojis
+            emojis = {
+                "clear sky": "☀️",
+                "few clouds": "🌤️",
+                "scattered clouds": "☁️",
+                "broken clouds": "🌥️",
+                "overcast clouds": "☁️",
+                "shower rain": "🌧️",
+                "rain": "☔",
+                "thunderstorm": "⛈️",
+                "snow": "❄️",
+                "mist": "🌫️",
+                "haze": "🌁"
+            }
+            
+            # Fetch the matching emoji, or default to a generic thermometer
+            weather_icon = emojis.get(description.lower(), "🌡️")
+
             print("\n--- Weather Report ---")
             print(f"Location:   {city}")
-            print(f"Condition:  {description.title()}")
+            print(f"Condition:  {weather_icon}  {description.title()}")
             print(f"Temp:       {temp}°C")
             print(f"Feels Like: {feels_like}°C")
             print(f"Humidity:   {humidity}%")
