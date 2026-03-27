@@ -2,16 +2,19 @@ import requests
 import json
 import argparse
 import sys
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-API_KEY = "6ea4096301ce8e9ab59d58964a4584d7"
+API_KEY = os.getenv("OPENWEATHER_API_KEY")
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
-
-
-
 def get_weather(city_name):
-    
+    if not API_KEY:
+        print("Error: API Key is missing. Please add OPENWEATHER_API_KEY to your .env file.")
+        return None
+
     params = {
         "q": city_name,
         "appid": API_KEY,
@@ -31,25 +34,18 @@ def get_weather(city_name):
         print(f"Error connecting to weather service: {e}")
         return None
 
-
 def display_weather(weather_data, city_name):
-    
     if weather_data is None:
         print(f"Sorry, could not get weather data for '{city_name}'.")
         return None
-    
-    
     else:
-        
         try:
-            
             city = weather_data['name']
             description = weather_data['weather'][0]['description']
             temp = weather_data['main']['temp']
             feels_like = weather_data['main']['feels_like']
             humidity = weather_data['main']['humidity']
 
-            
             print("\n--- Weather Report ---")
             print(f"Location:   {city}")
             print(f"Condition:  {description.title()}")
@@ -59,29 +55,17 @@ def display_weather(weather_data, city_name):
             print("----------------------\n")
         
         except KeyError:
-            
             print("Error: Could not parse weather data. Response may be incomplete.")
 
-
-
 def main():
-    
-    
     parser = argparse.ArgumentParser(description="Get the current weather for a city.")
-    
-    
     parser.add_argument("city", nargs="+", help="The name of the city to get weather for.")
-
-    
     args = parser.parse_args()
 
-    
     city_name = " ".join(args.city)
 
-    
     weather_data = get_weather(city_name)
     display_weather(weather_data, city_name)
-
 
 if __name__ == "__main__":
     main()
